@@ -1,0 +1,50 @@
+[project]
+name = "demucs-next"
+version = "1.0.0"
+description = "Audio source separation for music."
+readme = "readme.md"
+authors = [
+    {name = "Alexandre Défossez", email = "defossez@fb.com"},
+    {name = "Ryan Fahey", email = "git@ryan.science"}
+]
+license = {text = "MIT License"}
+requires-python = ">=3.10, <=3.13"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=2.0.0",
+    "torch>=2.9.0",
+    "torchaudio>=2.9.0",
+    "torchcodec>=0.8.1",
+    "typer>=0.19.1",
+    "httpx>=0.28.1"
+]
+
+[project.optional-dependencies]
+dev = [
+  "ruff",
+]
+onnx = [
+  "onnx>=1.14.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.7.21,<0.8.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "demucs"
+module-root = ""
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402"]
+
+[project.scripts]
+demucs = "demucs.cli:main"
+demucs-inference = "demucs.cli:main" # Provided for compatibility with uvx
