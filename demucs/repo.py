@@ -50,19 +50,23 @@ def check_checksum(path: Path, checksum: str):
 def get_cache_dir() -> Path:
     """
     Get the cache directory for Demucs models.
-    Prioritizes remote data volume.
     """
-    possible_remote_folder = Path("/cache_data")
+    # Check for specific cache locations
+    paths = [
+        Path("/root/.cache/demucs"),
+        Path("/cache_data/.demucs/models"),
+    ]
     
-    # Check if /mnt exists AND is writable by the current user
-    if possible_remote_folder.exists() and os.access(possible_remote_folder, os.W_OK):
-        cache_dir = possible_remote_folder / ".demucs" / "models"
-        try:
-            cache_dir.mkdir(parents=True, exist_ok=True)
-            return cache_dir
-        except OSError:
-            # If for some reason mkdir fails, silently fall back to home
-            pass
+    for p in paths:
+        if p.exists() and os.access(p, os.W_OK):
+            return p
+        # If it doesn't exist but parent is writable, try to create it
+        if not p.exists() and p.parent.exists() and os.access(p.parent, os.W_OK):
+            try:
+                p.mkdir(parents=True, exist_ok=True)
+                return p
+            except OSError:
+                continue
 
     # Standard Fallback
     home = Path.home()
