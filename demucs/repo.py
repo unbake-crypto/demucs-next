@@ -104,8 +104,11 @@ class ModelRepository:
             if "models" in model_info:
                 for model_entry in model_info["models"]:
                     checksum = model_entry["checksum"]
-                    remote_path = model_entry["remote"]
-                    self._layer_urls[checksum] = f"{BASE_CDN_URL}/{remote_path}"
+                    remote = model_entry["remote"]
+                    if remote.startswith("http://") or remote.startswith("https://"):
+                        self._layer_urls[checksum] = remote
+                    else:
+                        self._layer_urls[checksum] = f"{BASE_CDN_URL}/{remote}"
 
     def get_cache_info(self) -> dict[str, dict]:
         """

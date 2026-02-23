@@ -66,7 +66,7 @@ class SeparatedSources:
                 complement += audio
 
         return SeparatedSources(
-            sources={name: self.sources[name], f"no_{name}": complement},
+            sources={name: self.sources[name], f"other": complement},
             sample_rate=self.sample_rate,
             original=self.original,
         )
@@ -111,7 +111,12 @@ class SeparatedSources:
             file_path.parent.mkdir(exist_ok=True, parents=True)
 
             encoder = AudioEncoder(samples=tensor, sample_rate=self.sample_rate)
-            encoder.to_file(file_path)
+            if format == "mp3":
+                encoder.to_file(file_path, bit_rate=320000)
+            elif format == "m4a":
+                encoder.to_file(file_path, bit_rate=256000)
+            else:
+                encoder.to_file(file_path)
 
             return file_path
         else:

@@ -70,6 +70,14 @@
           "checksum": "34c22ccb"
         }
       ]
+    },
+    "htdemucs_drumsep": {
+      "models": [
+        {
+          "remote": "https://pub-de55463ffce94be18acb2264b07a0c87.r2.dev/49469ca8.th",
+          "checksum": "aefaa854"
+        }
+      ]
     }
   }
 }
